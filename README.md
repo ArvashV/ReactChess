@@ -1,2 +1,3 @@
 # ReactChess
-A chess app built using react
+
+A chess webite built using React and Tailwind 
