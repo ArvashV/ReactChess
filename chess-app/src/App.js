@@ -8,7 +8,6 @@ const App = () => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    // Initialize the WebSocket connection
     const newSocket = io('http://localhost:4000', {
       transports: ['websocket', 'polling'],
     });
@@ -17,7 +16,7 @@ const App = () => {
     return () => newSocket.close();
   }, []);
 
-  if (!socket) return <div>Loading...</div>; 
+  if (!socket) return <div>Loading...</div>;
 
   return (
     <Router>
