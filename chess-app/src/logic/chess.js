@@ -11,11 +11,20 @@ export const getBoard = () => {
   return chess.board();
 };
 
-export const handleMove = (from, to) => {
-  const move = chess.move({ from, to });
-  return move ? chess.board() : null;
+export const isGameOver = () => {
+  return chess.isGameOver();
 };
 
-export const resetGame = () => {
-  chess.reset();
+export const isCheck = () => {
+  return chess.inCheck();
 };
+
+export const isCheckmate = () => {
+  return chess.isCheckmate();
+};
+
+export const getHistory = () => {
+  return chess.history({ verbose: true });
+};
+
+

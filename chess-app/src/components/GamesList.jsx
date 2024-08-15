@@ -21,8 +21,6 @@ const GamesList = ({ socket }) => {
     if (socket) {
       socket.emit('startGame', { gameId, whitePlayer, blackPlayer, timeControl });
       navigate(`/game/${gameId}`, { state: { whitePlayer, blackPlayer, timeControl } });
-    } else {
-      console.error('Socket is undefined');
     }
   };
 

@@ -21,17 +21,47 @@ app.get('/games', (req, res) => {
   res.json(Object.keys(games));
 });
 
+app.post('/game', (req, res) => {
+  const { gameId, whitePlayer, blackPlayer, timeControl } = req.body;
+  if (!games[gameId]) {
+    games[gameId] = {
+      whitePlayer,
+      blackPlayer,
+      timeControl,
+      board: null,
+      moveHistory: [],
+      isWhiteTurn: true,
+      whiteTime: timeControl * 60,
+      blackTime: timeControl * 60,
+    };
+  }
+  res.status(200).send('Game created');
+});
+
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
   socket.on('startGame', ({ gameId, whitePlayer, blackPlayer, timeControl }) => {
-    games[gameId] = { board: null, whitePlayer, blackPlayer, timeControl };
-    io.emit('gamesList', Object.keys(games));
+    if (!games[gameId]) {
+      games[gameId] = {
+        whitePlayer,
+        blackPlayer,
+        timeControl,
+        board: null,
+        moveHistory: [],
+        isWhiteTurn: true,
+        whiteTime: timeControl * 60,
+        blackTime: timeControl * 60,
+      };
+      io.emit('gamesList', Object.keys(games));
+    }
   });
 
-  socket.on('move', ({ gameId, board, isWhiteTurn }) => {
+  socket.on('move', ({ gameId, board, isWhiteTurn, move }) => {
     if (games[gameId]) {
       games[gameId].board = board;
+      games[gameId].isWhiteTurn = isWhiteTurn;
+      games[gameId].moveHistory.push(move);
       io.emit('move', { gameId, board, isWhiteTurn });
     }
   });
